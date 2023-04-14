@@ -1,14 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ParentWidget extends StatefulWidget {
   bool? arrowChecker;
   Icon? checkIcon = const Icon(Icons.circle_outlined);
   bool? checkChecker = true;
-
-  ParentWidget({
-    super.key,
-    this.arrowChecker,
-  });
+  bool isAnimating;
+  ParentWidget(
+      {super.key, this.arrowChecker = false, this.isAnimating = false});
 
   @override
   _ParentWidgetState createState() => _ParentWidgetState();
@@ -20,11 +20,13 @@ class _ParentWidgetState extends State<ParentWidget>
   Widget build(BuildContext context) => Column(
         children: [
           HomeTaskButton(
+            isAnimating: widget.isAnimating,
             checkChecker: widget.checkChecker,
             checkIcon: widget.checkIcon,
             arrowChecker: widget.arrowChecker,
           ),
           _TrashBin(
+            isAnimating: widget.isAnimating,
             arrowChecker: widget.arrowChecker,
           )
         ],
@@ -37,12 +39,12 @@ class HomeTaskButton extends StatefulWidget {
     this.taskName = "sda",
     this.taskTime = const TimeOfDay(hour: 10, minute: 00),
     this.taskTimeColor = const Color(0xFF9B9B9B),
-    this.arrowChecker = true,
+    this.arrowChecker = false,
     this.checkChecker = true,
     this.checkIcon = const Icon(Icons.circle_outlined),
     this.isAnimating = false,
   });
-  bool? isAnimating;
+  bool isAnimating;
   bool? arrowChecker;
   Icon? checkIcon;
   bool? checkChecker;
@@ -143,72 +145,69 @@ class _HomeTaskButtonState extends State<HomeTaskButton>
                   });
                 },
                 child: Column(children: [
-                  AnimatedBuilder(
-                    animation: heightController,
-                    builder: (BuildContext context, Widget? child) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width - 100,
-                        height: heightAnimation.animate(heightController).value,
-                        alignment: Alignment.topCenter,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    width: MediaQuery.of(context).size.width - 100,
+                    height: widget.isAnimating ? 200 : 62,
+                    alignment: Alignment.topCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${widget.taskName}",
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              "${widget.taskName}",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
+                              "${widget.taskTime.format(context)}",
+                              style: TextStyle(
+                                color: widget.taskTimeColor,
+                                fontWeight: FontWeight.w500,
                                 fontFamily: "Poppins",
+                                fontSize: 20,
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "${widget.taskTime.format(context)}",
-                                  style: TextStyle(
-                                    color: widget.taskTimeColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 20,
-                                  ),
+                            IconButton(
+                              hoverColor: Colors.transparent,
+                              onPressed: () {
+                                setState(() {
+                                  if (widget.isAnimating == true) {
+                                    widget.isAnimating = false;
+                                    widget.arrowChecker = false;
+                                  } else {
+                                    widget.arrowChecker = true;
+                                    widget.isAnimating = true;
+                                  }
+                                });
+                              },
+                              icon: AnimatedRotation(
+                                duration: Duration(milliseconds: 200),
+                                turns: widget.isAnimating ? .5 : 1,
+                                child: Icon(
+                                  Icons.keyboard_arrow_down_sharp,
+                                  color: Color(0xFFFF0000),
                                 ),
-                                IconButton(
-                                    hoverColor: Colors.transparent,
-                                    onPressed: () {
-                                      setState(() {
-                                        if (widget.arrowChecker == true) {
-                                          controller.forward();
-                                          heightController.forward();
-
-                                          widget.arrowChecker = false;
-                                        } else {
-                                          heightController.reverse();
-
-                                          controller.reverse();
-                                          widget.arrowChecker = true;
-                                        }
-                                      });
-                                    },
-                                    icon: RotationTransition(
-                                      turns: animatedIcon.animate(controller),
-                                      child: const Icon(
-                                        Icons.keyboard_arrow_down_sharp,
-                                        color: Color(0xFFFF0000),
-                                      ),
-                                    ))
-                              ],
-                            ),
+                              ),
+                            )
                           ],
                         ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width - 137,
                     ),
-                    child: _TrashBin(),
+                    child: _TrashBin(
+                      arrowChecker: widget.arrowChecker,
+                      isAnimating: widget.isAnimating,
+                    ),
                   ),
                 ]))),
       ],
@@ -218,9 +217,10 @@ class _HomeTaskButtonState extends State<HomeTaskButton>
 
 class _TrashBin extends StatefulWidget {
   bool? arrowChecker;
-
+  bool isAnimating;
   _TrashBin({
     this.arrowChecker,
+    this.isAnimating = false,
   });
 
   @override
@@ -230,31 +230,28 @@ class _TrashBin extends StatefulWidget {
 class __TrashBinState extends State<_TrashBin> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    if (widget.arrowChecker == true) {
+    if (widget.arrowChecker == false) {
       return Container();
     } else {
-      return AnimatedBuilder(
-        animation: heightController,
-        builder: (BuildContext context, Widget? child) {
-          return Opacity(
-            opacity: animatedOpacity.animate(controller).value,
-            child: IconButton(
-                hoverColor: Colors.transparent,
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          color: Colors.black,
-                        );
-                      });
-                },
-                icon: const Icon(
-                  Icons.delete_outline_rounded,
-                  color: Color(0xFFFF0000),
-                )),
-          );
-        },
+      return AnimatedOpacity(
+        duration: Duration(milliseconds: 20000),
+        opacity: widget.isAnimating ? 1 : 0,
+        child: IconButton(
+            hoverColor: Colors.transparent,
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      color: Colors.transparent,
+                      width: 1000,
+                    );
+                  });
+            },
+            icon: const Icon(
+              Icons.delete_outline_rounded,
+              color: Color(0xFFFF0000),
+            )),
       );
     }
   }

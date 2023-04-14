@@ -1,96 +1,94 @@
 import 'package:flutter/material.dart';
 
- bool _arrowChecker = true;
-String taskName = "aksksadass";
-Icon _checkIcon = const Icon(Icons.circle_outlined);
-bool _checkChecker = true;
-var taskTime = const TimeOfDay(hour: 10, minute: 00);
-Color buttonColor = const Color(0xFFECFFE9);
-Color taskTimeColor = const Color(0xFF9B9B9B);
+class ParentWidget extends StatefulWidget {
+  bool? arrowChecker;
+  Icon? checkIcon = const Icon(Icons.circle_outlined);
+  bool? checkChecker = true;
 
-
-
-late AnimationController _controller;
-late AnimationController _heightController;
-bool rotated = true;
-Tween<double> animatedIcon = Tween(begin: 1, end: 0);
-Tween<double> animatedOpacity = Tween(begin: 0, end: 1);
-Animation<double> heightAnimation =
-    Tween<double>(begin: 62, end: 200).animate(_heightController);
-
-class _TrashBin extends StatefulWidget {
-  const _TrashBin({super.key});
+  ParentWidget({
+    super.key,
+    this.arrowChecker,
+  });
 
   @override
-  State<_TrashBin> createState() => __TrashBinState();
+  _ParentWidgetState createState() => _ParentWidgetState();
 }
 
-class __TrashBinState extends State<_TrashBin> {
+class _ParentWidgetState extends State<ParentWidget>
+    with TickerProviderStateMixin {
   @override
-  Widget build(BuildContext context) {
-    if (_arrowChecker == true) {
-      return Container();
-    } else {
-      return AnimatedBuilder(
-        animation: _heightController,
-        builder: (BuildContext context, Widget? child) {
-          return Opacity(
-            opacity: animatedOpacity.animate(_controller).value,
-            child: IconButton(
-                hoverColor: Colors.transparent,
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          color: Colors.black,
-                        );
-                      });
-                },
-                icon: const Icon(
-                  Icons.delete_outline_rounded,
-                  color: Color(0xFFFF0000),
-                )),
-          );
-        },
+  Widget build(BuildContext context) => Column(
+        children: [
+          HomeTaskButton(
+            checkChecker: widget.checkChecker,
+            checkIcon: widget.checkIcon,
+            arrowChecker: widget.arrowChecker,
+          ),
+          _TrashBin(
+            arrowChecker: widget.arrowChecker,
+          )
+        ],
       );
-    }
-  }
 }
 
 class HomeTaskButton extends StatefulWidget {
-  const HomeTaskButton({super.key});
+  HomeTaskButton({
+    this.buttonColor = const Color(0xFFECFFE9),
+    this.taskName = "sda",
+    this.taskTime = const TimeOfDay(hour: 10, minute: 00),
+    this.taskTimeColor = const Color(0xFF9B9B9B),
+    this.arrowChecker = true,
+    this.checkChecker = true,
+    this.checkIcon = const Icon(Icons.circle_outlined),
+    this.isAnimating = false,
+  });
+  bool? isAnimating;
+  bool? arrowChecker;
+  Icon? checkIcon;
+  bool? checkChecker;
+
+  String? taskName;
+  var taskTime;
+  Color buttonColor;
+  Color taskTimeColor;
 
   @override
   State<HomeTaskButton> createState() => _HomeTaskButtonState();
 }
 
+late AnimationController controller;
+late AnimationController heightController;
+bool rotated = true;
+Tween<double> animatedIcon = Tween(begin: 1, end: 0);
+Tween<double> animatedOpacity = Tween(begin: 0, end: 1);
+Tween<double> heightAnimation = Tween<double>(begin: 62, end: 200);
+
 class _HomeTaskButtonState extends State<HomeTaskButton>
     with TickerProviderStateMixin {
+  @override
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
+    controller = AnimationController(
       vsync: this,
       lowerBound: 0,
       upperBound: .5,
       duration: const Duration(milliseconds: 200),
     );
-    _heightController = AnimationController(
+    heightController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200));
-    _controller.stop();
-    _heightController.stop();
+    controller.stop();
+    heightController.stop();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-    _heightController.dispose();
+    controller.dispose();
+    heightController.dispose();
     super.dispose();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,64 +97,64 @@ class _HomeTaskButtonState extends State<HomeTaskButton>
             hoverColor: Colors.transparent,
             onPressed: () {
               setState(() {
-                if (_checkChecker == true) {
-                  _checkIcon = const Icon(
+                if (widget.checkChecker == true) {
+                  widget.checkIcon = const Icon(
                     Icons.check_circle_outline_outlined,
                     color: Colors.green,
                   );
-                  buttonColor = const Color(0xFFECFFE9);
+                  widget.buttonColor = const Color(0xFFECFFE9);
 
-                  _checkChecker = false;
+                  widget.checkChecker = false;
                 } else {
-                  _checkIcon = const Icon(Icons.circle_outlined);
-                  _checkChecker = true;
-                  buttonColor = const Color(0xFFECFFE9);
+                  widget.checkIcon = const Icon(Icons.circle_outlined);
+                  widget.checkChecker = true;
+                  widget.buttonColor = const Color(0xFFECFFE9);
                 }
               });
             },
-            icon: _checkIcon),
+            icon: widget.checkIcon!),
         Container(
             child: MaterialButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25)),
-                color: buttonColor,
+                color: widget.buttonColor,
                 height: 62,
                 minWidth: 270,
                 elevation: 0,
                 hoverElevation: 0,
                 onPressed: () {
                   setState(() {
-                    if (_checkChecker == true) {
-                      taskTimeColor = const Color(0xFFFFFFFF);
-                      buttonColor = const Color(0xFFD49DFF);
-                      _checkIcon = const Icon(
+                    if (widget.checkChecker == true) {
+                      widget.taskTimeColor = const Color(0xFFFFFFFF);
+                      widget.buttonColor = const Color(0xFFD49DFF);
+                      widget.checkIcon = const Icon(
                         Icons.radio_button_checked_rounded,
                         color: Colors.purple,
                       );
 
-                      _checkChecker = false;
+                      widget.checkChecker = false;
                     } else {
-                      taskTimeColor = const Color(0xFF9B9B9B);
+                      widget.taskTimeColor = const Color(0xFF9B9B9B);
 
-                      _checkIcon = const Icon(Icons.circle_outlined);
-                      _checkChecker = true;
-                      buttonColor = const Color(0xFFECFFE9);
+                      widget.checkIcon = const Icon(Icons.circle_outlined);
+                      widget.checkChecker = true;
+                      widget.buttonColor = const Color(0xFFECFFE9);
                     }
                   });
                 },
                 child: Column(children: [
                   AnimatedBuilder(
-                    animation: _heightController,
+                    animation: heightController,
                     builder: (BuildContext context, Widget? child) {
                       return Container(
                         width: MediaQuery.of(context).size.width - 100,
-                        height: heightAnimation.value,
+                        height: heightAnimation.animate(heightController).value,
                         alignment: Alignment.topCenter,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "$taskName",
+                              "${widget.taskName}",
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w700,
@@ -167,9 +165,9 @@ class _HomeTaskButtonState extends State<HomeTaskButton>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  "${taskTime.format(context)}",
+                                  "${widget.taskTime.format(context)}",
                                   style: TextStyle(
-                                    color: taskTimeColor,
+                                    color: widget.taskTimeColor,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: "Poppins",
                                     fontSize: 20,
@@ -179,21 +177,21 @@ class _HomeTaskButtonState extends State<HomeTaskButton>
                                     hoverColor: Colors.transparent,
                                     onPressed: () {
                                       setState(() {
-                                        if (_arrowChecker == true) {
-                                          _controller.forward();
-                                          _heightController.forward();
+                                        if (widget.arrowChecker == true) {
+                                          controller.forward();
+                                          heightController.forward();
 
-                                          _arrowChecker = false;
+                                          widget.arrowChecker = false;
                                         } else {
-                                          _heightController.reverse();
+                                          heightController.reverse();
 
-                                          _controller.reverse();
-                                          _arrowChecker = true;
+                                          controller.reverse();
+                                          widget.arrowChecker = true;
                                         }
                                       });
                                     },
                                     icon: RotationTransition(
-                                      turns: animatedIcon.animate(_controller),
+                                      turns: animatedIcon.animate(controller),
                                       child: const Icon(
                                         Icons.keyboard_arrow_down_sharp,
                                         color: Color(0xFFFF0000),
@@ -215,5 +213,49 @@ class _HomeTaskButtonState extends State<HomeTaskButton>
                 ]))),
       ],
     );
+  }
+}
+
+class _TrashBin extends StatefulWidget {
+  bool? arrowChecker;
+
+  _TrashBin({
+    this.arrowChecker,
+  });
+
+  @override
+  State<_TrashBin> createState() => __TrashBinState();
+}
+
+class __TrashBinState extends State<_TrashBin> with TickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.arrowChecker == true) {
+      return Container();
+    } else {
+      return AnimatedBuilder(
+        animation: heightController,
+        builder: (BuildContext context, Widget? child) {
+          return Opacity(
+            opacity: animatedOpacity.animate(controller).value,
+            child: IconButton(
+                hoverColor: Colors.transparent,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          color: Colors.black,
+                        );
+                      });
+                },
+                icon: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: Color(0xFFFF0000),
+                )),
+          );
+        },
+      );
+    }
   }
 }

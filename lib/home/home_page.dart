@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 // import 'new.dart';
-import 'new.dart';
+import 'task_button.dart';
 
 int counter = listOfButtons.length;
 List<Widget> listOfButtons = [
   HomeTaskButton(),
-  HomeTaskButton(),
+  HomeTaskButton(taskName: "Sdaa",),
   HomeTaskButton(),
 ];
 

@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 
 class HomeTaskButton extends StatefulWidget {
-  final String? text;
+  Color? color;
   final Function? onPressed;
   final bool isSelected;
 
-  HomeTaskButton({this.text = "32", this.onPressed, this.isSelected = false});
+  HomeTaskButton({this.color, this.onPressed, this.isSelected = false});
 
   @override
   _HomeTaskButtonState createState() => _HomeTaskButtonState();
@@ -26,12 +26,17 @@ class _HomeTaskButtonState extends State<HomeTaskButton> {
       onPressed: () {
         setState(() {
           _isSelected = !_isSelected;
+          if (_isSelected == true) {
+            widget.color = Colors.amber;
+          } else {
+            widget.color = Colors.black;
+          }
         });
         widget.onPressed!(_isSelected);
       },
-      color: _isSelected ? Colors.blue : Colors.white,
+      color: widget.color,
       child: Text(
-        widget.text!,
+        "ss",
         style: TextStyle(
           color: _isSelected ? Colors.white : Colors.blue,
         ),

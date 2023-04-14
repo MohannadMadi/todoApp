@@ -108,7 +108,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
-                                  "$taskName",
+                                  "${taskDescription}",
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,

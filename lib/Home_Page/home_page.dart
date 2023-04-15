@@ -5,7 +5,7 @@ import 'task_button.dart';
 int counter = listOfButtons.length;
 List<Widget> listOfButtons = [
   HomeTaskButton(),
-  HomeTaskButton(taskName: "Sdaa",),
+  HomeTaskButton(),
   HomeTaskButton(),
 ];
 
@@ -44,7 +44,7 @@ class _Home_pageState extends State<Home_page> {
                   borderRadius: BorderRadius.circular(70), color: Colors.black),
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
               child: Text(
-                "$counter tasks",
+                "${listOfButtons.length} tasks",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -68,7 +68,9 @@ class _Home_pageState extends State<Home_page> {
             children: List.generate(
               listOfButtons.length,
               (index) {
-                return HomeTaskButton();
+                return HomeTaskButton(
+                  index: index,
+                );
               },
             ).toList(),
           ),

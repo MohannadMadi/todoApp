@@ -1,29 +1,12 @@
 import 'package:flutter/material.dart';
-import '../home/home_page.dart';
-import '../home/task_button.dart';
+import '../home_page/home_page.dart';
+import '../home_page/task_button.dart';
 import 'calendar_button.dart';
 import 'package:intl/intl.dart';
 
-class _Calendar extends StatefulWidget {
-  const _Calendar({super.key});
-
-  @override
-  State<_Calendar> createState() => __CalendarState();
-}
-
-class __CalendarState extends State<_Calendar> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Row(),
-      ),
-    );
-  }
-}
-
 class Calendar extends StatefulWidget {
-  const Calendar({super.key});
+  int index;
+  Calendar({super.key, this.index = 0});
 
   @override
   State<Calendar> createState() => _CalendarState();
@@ -110,7 +93,7 @@ class _CalendarState extends State<Calendar> {
         SingleChildScrollView(
           child: Column(
             children: [
-              ...eachDayButton[1],
+              ...eachDayButton[0],
             ],
           ),
         )
@@ -119,9 +102,10 @@ class _CalendarState extends State<Calendar> {
   }
 }
 
-int selectedDay = 0;
-
 class CalendarWidget extends StatefulWidget {
+  CalendarWidget({super.key, this.selectedDay = 0});
+  int selectedDay;
+
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
 }
@@ -179,9 +163,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     var dayOfMonth = index + 4 - firstDayOfMonth.weekday;
                     print(dayOfMonth + 3);
 
-                    if (selectedDay == null || selectedDay != index) {
+                    if (widget.selectedDay == null ||
+                        widget.selectedDay != index) {
                       setState(() {
-                        selectedDay = index;
+                        widget.selectedDay = index;
                       });
                     }
                   },
@@ -207,7 +192,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                     ],
                   ),
                   shape: RoundedRectangleBorder(
-                    side: selectedDay == index
+                    side: widget.selectedDay == index
                         ? BorderSide(width: .5)
                         : BorderSide(width: 0, style: BorderStyle.none),
                     borderRadius: BorderRadius.circular(5),

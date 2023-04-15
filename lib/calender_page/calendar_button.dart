@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home/task_button.dart';
-
-Icon _checkIcon = const Icon(Icons.circle_outlined);
-bool _checkChecker = true;
-var taskTime = const TimeOfDay(hour: 10, minute: 00);
-Color buttonColor = const Color(0xFFECFFE9);
-Color taskTimeColor = const Color(0xFF9B9B9B);
-bool rotated = true;
-Tween<double> animatedIcon = Tween(begin: 1, end: 0);
-
-String? taskDescription = "sda";
+import '../home_page/task_button.dart';
 
 class _CalendarTrashBin extends StatefulWidget {
   const _CalendarTrashBin({super.key});
@@ -32,7 +22,23 @@ class __CalendarTrashBinState extends State<_CalendarTrashBin> {
 }
 
 class CalendarButton extends StatefulWidget {
-  const CalendarButton({super.key});
+  Icon checkIcon;
+  bool checkChecker;
+  var taskTime;
+  Color buttonColor;
+  Color taskTimeColor;
+  String? taskDescription;
+  String? taskName;
+
+  CalendarButton(
+      {super.key,
+      this.buttonColor = const Color(0xFFECFFE9),
+      this.checkChecker = true,
+      this.checkIcon = const Icon(Icons.circle_outlined),
+      this.taskTime = const TimeOfDay(hour: 10, minute: 00),
+      this.taskDescription,
+      this.taskName,
+      this.taskTimeColor = const Color(0xFF9B9B9B)});
 
   @override
   State<CalendarButton> createState() => _CalendarButtonState();
@@ -48,48 +54,48 @@ class _CalendarButtonState extends State<CalendarButton> {
             hoverColor: Colors.transparent,
             onPressed: () {
               setState(() {
-                if (_checkChecker == true) {
-                  _checkIcon = const Icon(
+                if (widget.checkChecker == true) {
+                  widget.checkIcon = const Icon(
                     Icons.check_circle_outline_outlined,
                     color: Colors.green,
                   );
-                  buttonColor = const Color(0xFFECFFE9);
+                  widget.buttonColor = const Color(0xFFECFFE9);
 
-                  _checkChecker = false;
+                  widget.checkChecker = false;
                 } else {
-                  _checkIcon = const Icon(Icons.circle_outlined);
-                  _checkChecker = true;
-                  buttonColor = const Color(0xFFECFFE9);
+                  widget.checkIcon = const Icon(Icons.circle_outlined);
+                  widget.checkChecker = true;
+                  widget.buttonColor = const Color(0xFFECFFE9);
                 }
               });
             },
-            icon: _checkIcon),
+            icon: widget.checkIcon),
         Container(
             child: MaterialButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25)),
-                color: buttonColor,
+                color: widget.buttonColor,
                 height: 62,
                 minWidth: 0,
                 elevation: 0,
                 hoverElevation: 0,
                 onPressed: () {
                   setState(() {
-                    if (_checkChecker == true) {
-                      taskTimeColor = const Color(0xFFFFFFFF);
-                      buttonColor = const Color(0xFFD49DFF);
-                      _checkIcon = const Icon(
+                    if (widget.checkChecker == true) {
+                      widget.taskTimeColor = const Color(0xFFFFFFFF);
+                      widget.buttonColor = const Color(0xFFD49DFF);
+                      widget.checkIcon = const Icon(
                         Icons.radio_button_checked_rounded,
                         color: Colors.purple,
                       );
 
-                      _checkChecker = false;
+                      widget.checkChecker = false;
                     } else {
-                      taskTimeColor = const Color(0xFF9B9B9B);
+                      widget.taskTimeColor = const Color(0xFF9B9B9B);
 
-                      _checkIcon = const Icon(Icons.circle_outlined);
-                      _checkChecker = true;
-                      buttonColor = const Color(0xFFECFFE9);
+                      widget.checkIcon = const Icon(Icons.circle_outlined);
+                      widget.checkChecker = true;
+                      widget.buttonColor = const Color(0xFFECFFE9);
                     }
                   });
                 },
@@ -108,16 +114,16 @@ class _CalendarButtonState extends State<CalendarButton> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
-                                  "${taskDescription}",
+                                  "${widget.taskDescription}",
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                     fontFamily: "Poppins",
                                   ),
                                 ),
-                                Text("$taskDescription",
+                                Text("${widget.taskDescription}",
                                     style: TextStyle(
-                                      color: taskTimeColor,
+                                      color: widget.taskTimeColor,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: "Poppins",
                                       fontSize: 15,
@@ -130,9 +136,9 @@ class _CalendarButtonState extends State<CalendarButton> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Text(
-                                    "${taskTime.format(context)}",
+                                    "${widget.taskTime.format(context)}",
                                     style: TextStyle(
-                                      color: taskTimeColor,
+                                      color: widget.taskTimeColor,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: "Poppins",
                                       fontSize: 20,

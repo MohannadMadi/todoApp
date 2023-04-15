@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/calender/calendar.dart';
-import 'home/home_page.dart';
+import 'package:to_do/Calender_Page/calendar.dart';
+import 'Home_Page/home_page.dart';
+import 'Timer_Page/timer.dart';
 
 Widget pageScroller = Home_page();
 Color _homeIconColor = Color(0xFFD49DFF);
@@ -70,6 +71,7 @@ class __DirectorState extends State<_Director> {
                 IconButton(
                     onPressed: () {
                       setState(() {
+                        pageScroller = CircularTimer();
                         _homeIconColor = Color(0xFFFFFFFF);
                         _calendarIconColor = Color(0xFFFFFFFF);
                         _timerIconColor = Color(0xFFD49DFF);

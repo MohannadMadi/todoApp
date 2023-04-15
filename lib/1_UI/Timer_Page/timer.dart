@@ -7,17 +7,14 @@ class CircularTimer extends StatefulWidget {
 }
 
 class _CircularTimerState extends State<CircularTimer> {
-  int _time = 8;
+  int _time = 60;
   Timer? _timer;
+  bool _isRunning = true;
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        _time++;
-      });
-    });
+    _startTimer();
   }
 
   @override
@@ -26,14 +23,36 @@ class _CircularTimerState extends State<CircularTimer> {
     super.dispose();
   }
 
-  void _resetTimer() {
+  void _startTimer() {
     setState(() {
-      _time = 0;
+      _isRunning = true;
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        setState(() {
+          _time--;
+          if (_time == 0) {
+            _stopTimer();
+          }
+        });
+      });
     });
   }
 
   void _stopTimer() {
-    _timer?.cancel();
+    setState(() {
+      _isRunning = false;
+      _timer?.cancel();
+      _timer = null;
+    });
+  }
+
+  void _resetTimer() {
+    setState(() {
+      _time = 60;
+    });
+  }
+
+  void _lapTimer() {
+    print('Lap time: ${60 - _time}s');
   }
 
   @override
@@ -45,9 +64,9 @@ class _CircularTimerState extends State<CircularTimer> {
           height: 200,
           child: CircularProgressIndicator(
             value: _time / 60,
-            strokeWidth: 10,
+            strokeWidth: 8,
             backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
             semanticsLabel: '${(_time / 60 * 100).toStringAsFixed(0)}%',
           ),
         ),
@@ -63,8 +82,18 @@ class _CircularTimerState extends State<CircularTimer> {
           right: 20,
           bottom: 20,
           child: ElevatedButton(
-            onPressed: _stopTimer,
-            child: Text('Stop'),
+            onPressed: _isRunning ? _stopTimer : _startTimer,
+            child: Text(_isRunning ? 'Stop' : 'Start'),
+          ),
+        ),
+        Positioned(
+          bottom: 20,
+          width: 200,
+          child: Center(
+            child: ElevatedButton(
+              onPressed: _lapTimer,
+              child: Text('Lap'),
+            ),
           ),
         ),
       ],

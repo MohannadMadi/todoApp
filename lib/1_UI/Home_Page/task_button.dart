@@ -1,49 +1,12 @@
 import 'dart:math';
-import 'package:to_do/Calender_Page/calendar_button.dart';
+import '../../3_Data/models/Task.dart';
 import './delete_popUp.dart';
 import 'package:flutter/material.dart';
 
-class ParentWidget extends StatefulWidget {
-  bool? arrowChecker;
-  Icon? checkIcon = const Icon(Icons.circle_outlined);
-  bool? checkChecker = true;
-  bool isAnimating;
-  String? taskName;
-  ParentWidget(
-      {super.key,
-      this.taskName,
-      this.arrowChecker = false,
-      this.isAnimating = false});
-
-  @override
-  _ParentWidgetState createState() => _ParentWidgetState();
-}
-
-class _ParentWidgetState extends State<ParentWidget> {
-  @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          HomeTaskButton(
-            isAnimating: widget.isAnimating,
-            checkChecker: widget.checkChecker,
-            checkIcon: widget.checkIcon,
-            arrowChecker: widget.arrowChecker,
-            taskName: widget.taskName,
-          ),
-          _TrashBin(
-            isAnimating: widget.isAnimating,
-            arrowChecker: widget.arrowChecker,
-          ),
-          CalendarButton(
-            taskName: widget.taskName,
-          )
-        ],
-      );
-}
-
 class HomeTaskButton extends StatefulWidget {
   HomeTaskButton(
-      {this.buttonColor = const Color(0xFFECFFE9),
+      {required this.onDelete,
+      this.buttonColor = const Color(0xFFECFFE9),
       this.taskName,
       this.taskTime = const TimeOfDay(hour: 10, minute: 00),
       this.taskTimeColor = const Color(0xFF9B9B9B),
@@ -51,8 +14,11 @@ class HomeTaskButton extends StatefulWidget {
       this.checkChecker = true,
       this.checkIcon = const Icon(Icons.circle_outlined),
       this.isAnimating = false,
-      this.index = 0});
-  int index;
+      required this.index,
+      required this.task});
+  final int index;
+  final Function() onDelete;
+  final Task task;
   bool isAnimating;
   bool? arrowChecker;
   Icon? checkIcon;
@@ -186,53 +152,29 @@ class _HomeTaskButtonState extends State<HomeTaskButton> {
                     margin: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width - 137,
                     ),
-                    child: _TrashBin(
-                      index: widget.index,
-                      arrowChecker: widget.arrowChecker,
-                      isAnimating: widget.isAnimating,
-                    ),
+                    child: widget.arrowChecker == false
+                        ? Container()
+                        : AnimatedOpacity(
+                            duration: Duration(milliseconds: 20000),
+                            opacity: widget.isAnimating ? 1 : 0,
+                            child: IconButton(
+                                hoverColor: Colors.transparent,
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) => PopUP(
+                                            onDelete: widget.onDelete,
+                                            index: widget.index,
+                                          ));
+                                },
+                                icon: const Icon(
+                                  Icons.delete_outline_rounded,
+                                  color: Color(0xFFFF0000),
+                                )),
+                          ),
                   ),
                 ]))),
       ],
     );
-  }
-}
-
-class _TrashBin extends StatefulWidget {
-  bool? arrowChecker;
-  bool isAnimating;
-  int index;
-  _TrashBin({this.arrowChecker, this.isAnimating = false, this.index = 0});
-
-  @override
-  State<_TrashBin> createState() => __TrashBinState();
-}
-
-class __TrashBinState extends State<_TrashBin> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.arrowChecker == false) {
-      return Container();
-    } else {
-      return AnimatedOpacity(
-        duration: Duration(milliseconds: 20000),
-        opacity: widget.isAnimating ? 1 : 0,
-        child: IconButton(
-            hoverColor: Colors.transparent,
-            onPressed: () {
-              setState(() {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => PopUP(
-                          index: widget.index,
-                        ));
-              });
-            },
-            icon: const Icon(
-              Icons.delete_outline_rounded,
-              color: Color(0xFFFF0000),
-            )),
-      );
-    }
   }
 }

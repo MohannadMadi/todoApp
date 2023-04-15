@@ -3,8 +3,9 @@ import 'home_page.dart';
 import 'task_button.dart';
 
 class PopUP extends StatefulWidget {
-  int index;
-  PopUP({super.key, this.index = 0});
+  final int index;
+  final Function() onDelete;
+  PopUP({super.key, required this.onDelete, required this.index});
 
   @override
   State<PopUP> createState() => _PopUPState();
@@ -64,10 +65,8 @@ class _PopUPState extends State<PopUP> {
                             side:
                                 BorderSide(width: 1, color: Color(0xFFD30000))),
                         onPressed: () {
-                          setState(() {
-                            listOfButtons.removeAt(widget.index);
-                            Navigator.pop(context);
-                          });
+                          widget.onDelete();
+                          Navigator.pop(context);
                         },
                         child: Text(
                           "Yes",

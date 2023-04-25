@@ -4,6 +4,7 @@ import '../home_page/task_button.dart';
 import 'calendar_button.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do/1_UI/generator.dart';
+import '../../3_Data/models/Task.dart';
 
 class Calendar extends StatefulWidget {
   int index;
@@ -12,6 +13,13 @@ class Calendar extends StatefulWidget {
   @override
   State<Calendar> createState() => _CalendarState();
 }
+
+List<Widget> buttonGenerators = [
+  ListGenerator(),
+  ListGenerator(),
+  ListGenerator(),
+  ListGenerator(),
+];
 
 class _CalendarState extends State<Calendar> {
   @override
@@ -61,45 +69,6 @@ class _CalendarState extends State<Calendar> {
   }
 }
 
-List eachDayButton = [
-  [CalendarButton(), CalendarButton()],
-  [
-    CalendarButton(),
-    CalendarButton(),
-    CalendarButton(),
-  ],
-  [],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-  [CalendarButton()],
-];
-
 class ButtonScroller extends StatefulWidget {
   int selectedDay;
   late List? eachDayButton;
@@ -113,11 +82,7 @@ class ButtonScroller extends StatefulWidget {
 class _ButtonScrollerState extends State<ButtonScroller> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: ListGenerator(
-      items: CalendarButton(),
-      lenght: 3,
-    ));
+    return SingleChildScrollView(child: buttonGenerators[widget.selectedDay]);
   }
 }
 

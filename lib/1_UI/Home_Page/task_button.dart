@@ -48,12 +48,14 @@ class _HomeTaskButtonState extends State<HomeTaskButton> {
                     Icons.check_circle_outline_outlined,
                     color: Colors.green,
                   );
-                  widget.buttonColor = const Color(0xFFECFFE9);
 
+                  widget.buttonColor = const Color(0xFFECFFE9);
                   widget.checkChecker = false;
                 } else {
                   widget.checkIcon = const Icon(Icons.circle_outlined);
                   widget.checkChecker = true;
+                  widget.taskTimeColor = const Color(0xFF9B9B9B);
+
                   widget.buttonColor = const Color(0xFFECFFE9);
                 }
               });
@@ -165,6 +167,7 @@ class _HomeTaskButtonState extends State<HomeTaskButton> {
                                       builder: (BuildContext context) => PopUP(
                                             onDelete: widget.onDelete,
                                             index: widget.index,
+
                                           ));
                                 },
                                 icon: const Icon(

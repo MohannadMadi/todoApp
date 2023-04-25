@@ -1,32 +1,8 @@
 import 'package:flutter/material.dart';
+import '../Home_Page/delete_popUp.dart';
 import '../home_page/task_button.dart';
 import 'calendar.dart';
-
-class _CalendarTrashBin extends StatefulWidget {
-  int index;
-  int selectedDay = 0;
-  _CalendarTrashBin({super.key, this.index = 0, this.selectedDay = 0});
-
-  @override
-  State<_CalendarTrashBin> createState() => __CalendarTrashBinState();
-}
-
-class __CalendarTrashBinState extends State<_CalendarTrashBin> {
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-        hoverColor: Colors.transparent,
-        onPressed: () {
-          setState(() {
-            eachDayButton.removeAt([widget.selectedDay][widget.index]);
-          });
-        },
-        icon: const Icon(
-          Icons.delete_outline_rounded,
-          color: Color(0xFFFF0000),
-        ));
-  }
-}
+import '../../3_Data/models/Task.dart';
 
 class CalendarButton extends StatefulWidget {
   Icon checkIcon;
@@ -38,9 +14,12 @@ class CalendarButton extends StatefulWidget {
   String? taskDescription;
   String? taskName;
   int? buttonDate;
-  int index;
+  final int index;
+  final Task task;
+  final Function() onDelete;
   CalendarButton(
       {super.key,
+      required this.task,
       this.buttonDate,
       this.buttonColor = const Color(0xFFECFFE9),
       this.checkChecker = true,
@@ -49,7 +28,8 @@ class CalendarButton extends StatefulWidget {
       this.taskDescription,
       this.taskName,
       this.taskTimeColor = const Color(0xFF9B9B9B),
-      this.index = 0,
+      required this.onDelete,
+      required this.index,
       this.selectedDay = 0});
 
   @override
@@ -164,10 +144,21 @@ class _CalendarButtonState extends State<CalendarButton> {
                         ),
                       ),
                     ]))),
-        _CalendarTrashBin(
-          index: widget.index,
-          selectedDay: widget.selectedDay,
-        )
+        IconButton(
+            hoverColor: Colors.transparent,
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => PopUP(
+                        onDelete: widget.onDelete,
+                        index: widget.index,
+                      ));
+              print(widget.index);
+            },
+            icon: const Icon(
+              Icons.delete_outline_rounded,
+              color: Color(0xFFFF0000),
+            ))
       ],
     );
   }

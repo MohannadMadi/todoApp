@@ -4,7 +4,7 @@ import '../home_page/task_button.dart';
 import 'calendar_button.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do/1_UI/generator.dart';
-import '../../3_Data/models/Task.dart';
+import '../../3_Data/models/task.dart';
 
 class Calendar extends StatefulWidget {
   int index;

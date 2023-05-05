@@ -7,8 +7,8 @@ class HomeTaskButton extends StatefulWidget {
   HomeTaskButton(
       {required this.onDelete,
       this.buttonColor = const Color(0xFFECFFE9),
-      this.taskName,
-      this.taskTime = const TimeOfDay(hour: 10, minute: 00),
+      this.taskName = "",
+      required this.taskTime,
       this.taskTimeColor = const Color(0xFF9B9B9B),
       this.arrowChecker = false,
       this.checkChecker = true,
@@ -25,7 +25,7 @@ class HomeTaskButton extends StatefulWidget {
   bool? checkChecker;
 
   String? taskName;
-  var taskTime;
+  DateTime taskTime;
   Color buttonColor;
   Color taskTimeColor;
 
@@ -112,7 +112,7 @@ class _HomeTaskButtonState extends State<HomeTaskButton> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "${widget.taskTime.format(context)}",
+                                "${widget.taskTime.hour}:${widget.taskTime.minute}",
                                 style: TextStyle(
                                   color: widget.taskTimeColor,
                                   fontWeight: FontWeight.w500,
@@ -167,7 +167,6 @@ class _HomeTaskButtonState extends State<HomeTaskButton> {
                                       builder: (BuildContext context) => PopUP(
                                             onDelete: widget.onDelete,
                                             index: widget.index,
-
                                           ));
                                 },
                                 icon: const Icon(

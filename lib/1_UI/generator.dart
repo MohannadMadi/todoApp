@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'calender_page/calendar.dart';
 import 'calender_page/calendar_button.dart';
-import '../../3_Data/models/Task.dart';
+import '../../3_Data/models/task.dart';
 
 class ListGenerator extends StatefulWidget {
   int? lenght;
@@ -14,14 +14,14 @@ class ListGenerator extends StatefulWidget {
   State<ListGenerator> createState() => _ListGeneratorState();
 }
 
-class _ListGeneratorState extends State<ListGenerator> {
-  List<Task> listOfTasks = [
-    Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-    Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-    Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-    Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-  ];
+List<Task> listOfTasks = [
+  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
+  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
+  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
+  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
+];
 
+class _ListGeneratorState extends State<ListGenerator> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -30,7 +30,6 @@ class _ListGeneratorState extends State<ListGenerator> {
       physics: BouncingScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         return CalendarButton(
-          
           onDelete: () {
             setState(() {
               listOfTasks.removeAt(index);

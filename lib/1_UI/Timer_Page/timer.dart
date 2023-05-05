@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class CircularTimer extends StatefulWidget {
   @override
@@ -7,7 +8,7 @@ class CircularTimer extends StatefulWidget {
 }
 
 class _CircularTimerState extends State<CircularTimer> {
-  int _time = 60;
+  double _time = 60;
   Timer? _timer;
   bool _isRunning = true;
 
@@ -26,10 +27,12 @@ class _CircularTimerState extends State<CircularTimer> {
   void _startTimer() {
     setState(() {
       _isRunning = true;
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(Duration(milliseconds: 5), (timer) {
         setState(() {
-          _time--;
-          if (_time == 0) {
+          _time -= .005;
+          if (_time <= .01) {
+            _time = 0;
+
             _stopTimer();
           }
         });
@@ -57,43 +60,94 @@ class _CircularTimerState extends State<CircularTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Container(
-          width: 200,
-          height: 200,
-          child: CircularProgressIndicator(
-            value: _time / 60,
-            strokeWidth: 8,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-            semanticsLabel: '${(_time / 60 * 100).toStringAsFixed(0)}%',
-          ),
+        Text(
+          "Stopwatch",
+          style: TextStyle(
+              fontFamily: "Poppins",
+              fontSize: 23,
+              fontWeight: FontWeight.w500,
+              color: Colors.black),
         ),
-        Positioned(
-          left: 20,
-          bottom: 20,
-          child: ElevatedButton(
-            onPressed: _resetTimer,
-            child: Text('Reset'),
-          ),
-        ),
-        Positioned(
-          right: 20,
-          bottom: 20,
-          child: ElevatedButton(
-            onPressed: _isRunning ? _stopTimer : _startTimer,
-            child: Text(_isRunning ? 'Stop' : 'Start'),
-          ),
-        ),
-        Positioned(
-          bottom: 20,
-          width: 200,
-          child: Center(
-            child: ElevatedButton(
-              onPressed: _lapTimer,
-              child: Text('Lap'),
+        CircularPercentIndicator(
+          radius: (MediaQuery.of(context).size.width / 2) - 30,
+          lineWidth: 6,
+          circularStrokeCap: CircularStrokeCap.round,
+          reverse: true,
+          progressColor: Color(0xFF1CC600),
+          percent: (_time) / 60,
+          backgroundColor: Colors.grey.shade200,
+          center: Text(
+            _time.toInt().toString(),
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.w600,
+              fontSize: 45,
             ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  elevation: 4,
+                  backgroundColor: Color(0xFFFFFFFF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
+              onPressed: _isRunning ? _stopTimer : _startTimer,
+              child: Text(
+                _isRunning ? 'Stop' : 'Start',
+                style: TextStyle(
+                    color: Color(0xFF8F00FF),
+                    fontSize: 15,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  elevation: 4,
+                  backgroundColor: Color(0xFFFFFFFF),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
+              onPressed: _resetTimer,
+              child: Text(
+                'Reset',
+                style: TextStyle(
+                    color: Color(0xFFFF0000),
+                    fontSize: 15,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              elevation: 4,
+              backgroundColor: Color(0xFFFFFFFF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
+          onPressed: () {
+            print((_time / 60));
+          },
+          child: Text(
+            'Lap',
+            style: TextStyle(
+                color: Colors.green,
+                fontSize: 15,
+                fontFamily: "Poppins",
+                fontWeight: FontWeight.w600),
           ),
         ),
       ],

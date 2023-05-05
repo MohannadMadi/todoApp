@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
-import '../home_page/home_page.dart';
-import '../home_page/task_button.dart';
-import 'calendar_button.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do/1_UI/generator.dart';
-import '../../3_Data/models/task.dart';
+import 'package:to_do/3_Data/models/task.dart';
 
 class Calendar extends StatefulWidget {
   int index;
-  Calendar({super.key, this.index = 0});
+  List<Task> listOfTasks;
+  Calendar({super.key, required this.listOfTasks, this.index = 0});
 
   @override
   State<Calendar> createState() => _CalendarState();
 }
-
-List<Widget> buttonGenerators = [
-  ListGenerator(),
-  ListGenerator(),
-  ListGenerator(),
-  ListGenerator(),
-];
 
 class _CalendarState extends State<Calendar> {
   @override
@@ -63,7 +54,7 @@ class _CalendarState extends State<Calendar> {
                     fontFamily: "Poppins"),
               )),
         ),
-        CalendarWidget(),
+        CalendarWidget(listOfTasks: widget.listOfTasks),
       ])),
     );
   }
@@ -72,8 +63,12 @@ class _CalendarState extends State<Calendar> {
 class ButtonScroller extends StatefulWidget {
   int selectedDay;
   late List? eachDayButton;
-
-  ButtonScroller({super.key, this.eachDayButton, this.selectedDay = 0});
+  List<Task> listOfTasks;
+  ButtonScroller(
+      {super.key,
+      required this.listOfTasks,
+      this.eachDayButton,
+      this.selectedDay = 0});
 
   @override
   State<ButtonScroller> createState() => _ButtonScrollerState();
@@ -82,14 +77,32 @@ class ButtonScroller extends StatefulWidget {
 class _ButtonScrollerState extends State<ButtonScroller> {
   @override
   Widget build(BuildContext context) {
+    List<Widget> buttonGenerators = [
+      ListGenerator(
+        listOfTasks: widget.listOfTasks,
+      ),
+      ListGenerator(
+        listOfTasks: widget.listOfTasks,
+      ),
+      ListGenerator(
+        listOfTasks: widget.listOfTasks,
+      ),
+      ListGenerator(
+        listOfTasks: widget.listOfTasks,
+      ),
+      ListGenerator(
+        listOfTasks: widget.listOfTasks,
+      ),
+    ];
+
     return SingleChildScrollView(child: buttonGenerators[widget.selectedDay]);
   }
 }
 
 class CalendarWidget extends StatefulWidget {
-  CalendarWidget({super.key, this.selectedDay = 0});
+  CalendarWidget({super.key, this.selectedDay = 0, required this.listOfTasks});
   int selectedDay;
-
+  List<Task> listOfTasks;
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
 }
@@ -191,6 +204,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           ),
         ),
         ButtonScroller(
+          listOfTasks: widget.listOfTasks,
           selectedDay: widget.selectedDay,
         )
       ],

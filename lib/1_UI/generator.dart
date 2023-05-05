@@ -5,8 +5,10 @@ import '../../3_Data/models/task.dart';
 
 class ListGenerator extends StatefulWidget {
   int? lenght;
+  List<Task> listOfTasks;
   ListGenerator({
     super.key,
+    required this.listOfTasks,
     this.lenght,
   });
 
@@ -14,29 +16,25 @@ class ListGenerator extends StatefulWidget {
   State<ListGenerator> createState() => _ListGeneratorState();
 }
 
-List<Task> listOfTasks = [
-  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-  Task(id: "hola", taskName: "yeah", dueDate: DateTime.now(), isDone: false),
-];
-
 class _ListGeneratorState extends State<ListGenerator> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.lenght = listOfTasks.length,
+      itemCount: widget.lenght = widget.listOfTasks.length,
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         return CalendarButton(
+          taskName: widget.listOfTasks[index].taskName,
+          taskDescription: widget.listOfTasks[index].id,
+          taskTime: widget.listOfTasks[index].dueDate,
           onDelete: () {
             setState(() {
-              listOfTasks.removeAt(index);
+              widget.listOfTasks.removeAt(index);
             });
           },
           index: index,
-          task: listOfTasks[index],
+          task: widget.listOfTasks[index],
         );
       },
     );

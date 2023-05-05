@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:to_do/3_Data/models/Task.dart';
+import 'package:to_do/3_Data/models/task.dart';
 
 import '/1_UI/Home_Page/home_page.dart';
 
@@ -147,6 +147,7 @@ class _ButtonMakerState extends State<ButtonMaker> {
                       margin: EdgeInsets.only(top: 10),
                       width: MediaQuery.of(context).size.width - 40,
                       child: TextField(
+                        controller: descriptionTextController,
                         keyboardAppearance: Brightness.dark,
                         textAlignVertical: TextAlignVertical.center,
                         maxLines: 1,
@@ -233,8 +234,10 @@ class _ButtonMakerState extends State<ButtonMaker> {
                               setState(() {
                                 dueDate = selectedDate;
                                 taskName = _taskTextController.text;
+                                taskDescription =
+                                    descriptionTextController.text;
                                 widget.onPressed(Task(
-                                    id: "D",
+                                    id: taskDescription,
                                     taskName: taskName,
                                     dueDate: dueDate,
                                     isDone: false));

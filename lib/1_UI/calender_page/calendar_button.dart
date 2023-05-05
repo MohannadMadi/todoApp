@@ -8,7 +8,7 @@ class CalendarButton extends StatefulWidget {
   Icon checkIcon;
   int selectedDay;
   bool checkChecker;
-  var taskTime;
+  late DateTime taskTime;
   Color buttonColor;
   Color taskTimeColor;
   String? taskDescription;
@@ -24,7 +24,7 @@ class CalendarButton extends StatefulWidget {
       this.buttonColor = const Color(0xFFECFFE9),
       this.checkChecker = true,
       this.checkIcon = const Icon(Icons.circle_outlined),
-      this.taskTime = const TimeOfDay(hour: 10, minute: 00),
+      required this.taskTime,
       this.taskDescription,
       this.taskName,
       this.taskTimeColor = const Color(0xFF9B9B9B),
@@ -107,7 +107,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
-                                  "${widget.taskDescription}",
+                                  "${widget.taskName}",
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,
@@ -129,7 +129,7 @@ class _CalendarButtonState extends State<CalendarButton> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Text(
-                                    "${widget.taskTime.format(context)}",
+                                    "${widget.taskTime.hour}:${widget.taskTime.minute}",
                                     style: TextStyle(
                                       color: widget.taskTimeColor,
                                       fontWeight: FontWeight.w500,

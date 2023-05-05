@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/1_UI/Button_Creator/button_maker.dart';
-import 'package:to_do/3_Data/models/Task.dart';
+import 'package:to_do/3_Data/models/task.dart';
 
 import '1_UI/Home_Page/home_page.dart';
 import '1_UI/Timer_Page/timer.dart';
@@ -88,7 +88,7 @@ class __DirectorState extends State<_Director> {
                       IconButton(
                           onPressed: () {
                             setState(() {
-                              pageScroller = Calendar();
+                              pageScroller = Calendar(listOfTasks: listOfTasks);
                               _homeIconColor = Color(0xFFFFFFFF);
                               _calendarIconColor = Color(0xFFD49DFF);
                               _timerIconColor = Color(0xFFFFFFFF);
